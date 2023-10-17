@@ -48,7 +48,7 @@ def option_proceed(option:int,list_created:int,list:list,number_of_values:int):
     elif option == 3:
       strand_sort(list, number_of_steps)
     list = create_random_list(number_of_values)
-    print(f"We generated an new list for you!")
+    print(f"We generated a new list for you!")
   else:
     print("You need to generate the array. Choose option 1 first.")
   show_menu(list_created,list,number_of_values)
@@ -76,6 +76,7 @@ def bubble_sort(arr:list, count:int):
     if swapped == False:
       print(f"The array has been sorted! New array is: {arr}")
       return arr
+ 
 
 # Strand Sort
 def strand_sort(array:list,  step:int):
