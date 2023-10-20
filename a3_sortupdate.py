@@ -36,10 +36,25 @@ def show_menu(list_created:int, list:list,number_of_values:int):
 def print_time(function:str, values:list):
   count = 1
   for integer in range(0, len(values)):
-    print(f"[{count}]The time taken is ",timeit.timeit(stmt=f'{function}({values[integer]})', globals=globals(), number = 1))
+    print(f"[{count}]The time taken is ", round(timeit.timeit(stmt=f'{function}({values[integer]})', globals=globals(), number = 1),6))
     count += 1
   return
-  
+
+
+def create_list(option:str, number_of_lists:int, length:int):
+  list = []
+  list_of_length = [length, 2*length, 4*length, 6*length, 8*length]
+  if option == 'best':
+    for i in range(0,number_of_lists):
+      list.append(create_bestcase_list(list_of_length[i]))
+  elif option == 'worst':
+    for i in range(0,number_of_lists):
+      list.append(create_worstcase_list(list_of_length[i]))
+  elif option == 'average':
+    for i in range(0,number_of_lists):
+      list.append(create_random_list(list_of_length[i]))
+  return list
+
 def create_bestcase_list(number:int):
   list = [1]
   for integer in range(1,number):
@@ -48,23 +63,29 @@ def create_bestcase_list(number:int):
 
 def bestcase_generation():
   number_of_values = introduce_number("Number of values in array: ")
-  list1,list2,list3,list4,list5= create_bestcase_list(number_of_values),create_bestcase_list(number_of_values*2),create_bestcase_list(number_of_values*4),create_bestcase_list(number_of_values*6),create_bestcase_list(number_of_values*8)
+  lists = create_list('best', 5, number_of_values)
   print("Bubble Sort Complexity for Best Case")
   #print("The time taken is ",timeit.timeit(stmt=f'bubble_sort({list1})', globals=globals(), number = 1))
-  print_time('bubble_sort', [list1,list2,list3,list4,list5])
-  list1,list2,list3,list4,list5= create_bestcase_list(number_of_values),create_bestcase_list(number_of_values*2),create_bestcase_list(number_of_values*4),create_bestcase_list(number_of_values*6),create_bestcase_list(number_of_values*8)
+  print_time('bubble_sort', lists)
+  lists = create_list('best', 5, number_of_values)
   print("Strand Sort Complexity for Best Case")
-  print_time('strand_sort', [list1,list2,list3,list4,list5])
+  print_time('strand_sort', lists)
   
+# This function create an random list
+def create_random_list(length:int):
+  list = []
+  for i in range(0,length):
+    list.append(randint(0, 10000))
+  return list
 
 def averagecase_generation():
   number_of_values = introduce_number("Number of values in array: ")
-  list1,list2,list3,list4,list5 = create_random_list(number_of_values), create_random_list(number_of_values*2), create_random_list(number_of_values*4), create_random_list(number_of_values*6), create_random_list(number_of_values*8)
+  #lists = create_list('average', 5, number_of_values)
   print("Bubble Sort Complexity for Average Case")
-  print_time('bubble_sort', [list1,list2,list3,list4,list5])
-  list1,list2,list3,list4,list5 = create_random_list(number_of_values), create_random_list(number_of_values*2), create_random_list(number_of_values*4), create_random_list(number_of_values*6), create_random_list(number_of_values*8)
+ # print_time('bubble_sort', lists)
+  lists = create_list('average', 5, number_of_values)
   print("Strand Sort Complexity for Average Case")
-  print_time('strand_sort', [list1,list2,list3,list4,list5])
+  print_time('strand_sort', lists)
 
 def create_worstcase_list(number:int):
   list = [number]
@@ -74,12 +95,12 @@ def create_worstcase_list(number:int):
 
 def worstcase_generation():
   number_of_values = introduce_number("Number of values in array: ")
-  list1,list2,list3,list4,list5 = create_worstcase_list(number_of_values),create_worstcase_list(number_of_values*2),create_worstcase_list(number_of_values*4), create_worstcase_list(number_of_values*6), create_worstcase_list(number_of_values*8)
+  lists = create_list('worst', 5, number_of_values)
   print("Bubble Sort Complexity for Worst Case")
-  print_time('bubble_sort', [list1,list2,list3,list4,list5])
-  list1,list2,list3,list4,list5 = create_worstcase_list(number_of_values),create_worstcase_list(number_of_values*2),create_worstcase_list(number_of_values*4), create_worstcase_list(number_of_values*6), create_worstcase_list(number_of_values*8)
+  print_time('bubble_sort', lists)
+  lists = create_list('worst', 5, number_of_values)
   print("Strand Sort Complexity for Worst Case")
-  print_time('strand_sort', [list1,list2,list3,list4,list5])
+  print_time('strand_sort', lists)
 
 # This function proceed the option and call what function he need
 def option_proceed(option:int,list_created:int,list:list,number_of_values:int):
@@ -108,13 +129,6 @@ def option_proceed(option:int,list_created:int,list:list,number_of_values:int):
     print("You need to generate the array. Choose option 1 first.")
   show_menu(list_created,list,number_of_values)
   return
-
-# This function create an random list
-def create_random_list(length:int):
-  list = []
-  for i in range(0,length):
-    list.append(randint(0, 10000))
-  return list
 
 # Bubble Sort
 def bubble_sort(arr:list):
