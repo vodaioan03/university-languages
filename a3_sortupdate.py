@@ -1,6 +1,6 @@
 from random import randint
 import timeit
-
+import copy
 # This function validate input only if is an integer number!
 def valid_option(text:str):
   if text.strip().isnumeric():
@@ -36,7 +36,8 @@ def show_menu(list_created:int, list:list,number_of_values:int):
 def print_time(function:str, values:list):
   count = 1
   for integer in range(0, len(values)):
-    print(f"[{count}]The time taken is ", round(timeit.timeit(stmt=f'{function}({values[integer]})', globals=globals(), number = 1),6))
+    print(f"- - - - - - - - - - - - - - List #{count} - - - - - - - - - - - - - - ")
+    print(f"Time of complexity:             |          ", round(timeit.timeit(stmt=f'{function}({values[integer]})', globals=globals(), number = 1),6))
     count += 1
   return
 
@@ -64,12 +65,12 @@ def create_bestcase_list(number:int):
 def bestcase_generation():
   number_of_values = introduce_number("Number of values in array: ")
   lists = create_list('best', 5, number_of_values)
+  lists_copy = copy.deepcopy(lists)
   print("Bubble Sort Complexity for Best Case")
   #print("The time taken is ",timeit.timeit(stmt=f'bubble_sort({list1})', globals=globals(), number = 1))
   print_time('bubble_sort', lists)
-  lists = create_list('best', 5, number_of_values)
-  print("Strand Sort Complexity for Best Case")
-  print_time('strand_sort', lists)
+  print("\nStrand Sort Complexity for Best Case")
+  print_time('strand_sort', lists_copy)
   
 # This function create an random list
 def create_random_list(length:int):
@@ -80,12 +81,12 @@ def create_random_list(length:int):
 
 def averagecase_generation():
   number_of_values = introduce_number("Number of values in array: ")
-  #lists = create_list('average', 5, number_of_values)
-  print("Bubble Sort Complexity for Average Case")
- # print_time('bubble_sort', lists)
   lists = create_list('average', 5, number_of_values)
+  lists_copy = copy.deepcopy(lists)
+  print("Bubble Sort Complexity for Average Case")
+  print_time('bubble_sort', lists)
   print("Strand Sort Complexity for Average Case")
-  print_time('strand_sort', lists)
+  print_time('strand_sort', lists_copy)
 
 def create_worstcase_list(number:int):
   list = [number]
@@ -96,11 +97,11 @@ def create_worstcase_list(number:int):
 def worstcase_generation():
   number_of_values = introduce_number("Number of values in array: ")
   lists = create_list('worst', 5, number_of_values)
+  lists_copy = copy.deepcopy(lists)
   print("Bubble Sort Complexity for Worst Case")
   print_time('bubble_sort', lists)
-  lists = create_list('worst', 5, number_of_values)
   print("Strand Sort Complexity for Worst Case")
-  print_time('strand_sort', lists)
+  print_time('strand_sort', lists_copy)
 
 # This function proceed the option and call what function he need
 def option_proceed(option:int,list_created:int,list:list,number_of_values:int):
