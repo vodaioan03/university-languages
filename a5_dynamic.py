@@ -11,6 +11,9 @@ from colorama import Fore, Style
 
 # Function for verification
 # Verification for option!
+def generate_list():
+    return [] 
+
 def valid(option_chosen:str):
     if option_chosen.isnumeric() and int(option_chosen) in [1,2,3,4,5,6,7]:
         return True
@@ -206,8 +209,6 @@ def dynamic_problem(complex_number_inserted:list):
 
 def create_complex_to_be_added(real_part:str,imaginary_part:str):
     return (real_part, imaginary_part)
-def generate_list():
-    return [] 
 
 def get_imaginary_part(number:list):
     return number[1]
@@ -225,8 +226,6 @@ def get_real_part(number:list):
 #=========================================================================
 # def create_complex_to_be_added(real_part:str,imaginary_part:str):
 #     return {"real": real_part, "imaginary": imaginary_part}
-# def generate_list():
-#     return []
 
 # def get_imaginary_part(number:list):
 #     return number['imaginary']
