@@ -6,6 +6,8 @@
 # Write the implementation for A5 in this file
 #
 import random
+import colorama
+from colorama import Fore, Style
 
 # Function for verification
 # Verification for option!
@@ -31,8 +33,12 @@ def option_proceed(option_chosen:int,complex_number_inserted):
     if option_chosen == 1:
         create_list_ui(complex_number_inserted)
     elif option_chosen == 2:
+        if len(complex_number_inserted) == 0:
+            raise ValueError("Inserted List is empty. You need to insert complex numbers.")
         mountain_problem_ui(complex_number_inserted)
     elif option_chosen == 3:
+        if len(complex_number_inserted) == 0:
+            raise ValueError("Inserted List is empty. You need to insert complex numbers.")
         dynamic_problem_ui(complex_number_inserted)
     elif option_chosen == 4:
         quit()
@@ -41,6 +47,8 @@ def option_proceed(option_chosen:int,complex_number_inserted):
     elif option_chosen == 6:
         test_for_12(complex_number_inserted)
     elif option_chosen == 7:
+        if len(complex_number_inserted) == 0:
+            raise ValueError("Inserted List is empty. You need to insert complex numbers.")
         clear_list(complex_number_inserted)
 
 # Verify if the input is a complex number
@@ -48,12 +56,12 @@ def valid_str(number:str):
     if len(number) == 0:
         return False
     number_split = split_number(number)
+    if len(number_split) != 2:
+        return False
     if number_split[1][0] == "-":
         number_split[1] = number_split[1][1::]
     if number_split[0][0] == "+" or number_split[0][0] == "-":
         number_split[0] = number_split[0][1::]
-    if len(number_split) != 2:
-        return False
     index_i_on_imaginary_part = number_split[1].find("i")
     if index_i_on_imaginary_part != len(number_split[1])-1:
         return False
@@ -68,6 +76,7 @@ def split_number(number:str):
         return [number, 0]
     sign_real = ''
     middle_sign = ''
+    number_split = ''
     if number[0] == "+" or number[0] == "-":
         sign_real = number[0]
         number = number[1::]
@@ -76,6 +85,8 @@ def split_number(number:str):
     elif "-" in number:
         number_split = number.split("-")
         middle_sign = '-'
+    if number_split == '':
+        return ''
     for char in number_split[0]:
         sign_real += char
     number_split[0] = sign_real.strip()
@@ -107,16 +118,9 @@ def divide_imaginary_part(imaginary_part_split:str):
 
 def mountain_problem_ui(complex_number_inserted:list):
     max_subb, len_max_subb = mountain_problem(complex_number_inserted)
-    print(f"\nThe length of max subbaray form of a montain: {len_max_subb}")
-    print(f"The subbaray form of a montain:")
-    solution_subb = []
-    for value in max_subb:
-        imaginary_part = get_imaginary_part(value)
-        if '-' in imaginary_part:
-            solution_subb.append(get_real_part(value)+ '' + get_imaginary_part(value) + 'i')
-        else:
-            solution_subb.append(get_real_part(value)+ '+' + get_imaginary_part(value) + 'i')
-    print(solution_subb)
+    print(Fore.GREEN +f"\nThe length of max subbaray form of a montain: {len_max_subb}" + Style.RESET_ALL)
+    print(Fore.GREEN + f"The subbaray form of a montain:"+ Style.RESET_ALL)
+    print_complex_list(max_subb, 'GREEN')
 
 def mountain_problem(complex_number_inserted:list):
     max_subarray = [complex_number_inserted[0]]
@@ -159,8 +163,8 @@ def mountain_problem(complex_number_inserted:list):
 
 def dynamic_problem_ui(complex_number_inserted:list):
     solution_list, length = dynamic_problem(complex_number_inserted)
-    print(f"The length and elements of a longest alternating subsequence, when considering each number's real part. Length: {length}")
-    print_complex_list(solution_list)
+    print(Fore.GREEN + f"The length and elements of a longest alternating subsequence, when considering each number's real part. Length: {length}" + Style.RESET_ALL)
+    print_complex_list(solution_list, 'GREEN')
 
 def dynamic_problem(complex_number_inserted:list):
     length_of_list = len(complex_number_inserted)
@@ -243,7 +247,7 @@ def create_list_ui(complex_number_inserted:list):
     try:
         add_complex_number(number,complex_number_inserted)
     except ValueError as e:
-        print("ERROR:"+str(e))
+        print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)
 
 def add_complex_number(number:str,complex_number_inserted):
     if number.isnumeric():
@@ -273,7 +277,7 @@ def print_menu():
     print("6. Test for 3 list: [1, 3, 2, 4, 10, 6, 1]")
     print("7. Clear inserted list.")
 
-def print_complex_list(complex_number_inserted:list):
+def print_complex_list(complex_number_inserted:list, color:str):
     solution_subb = []
     for value in complex_number_inserted:
         imaginary_part = get_imaginary_part(value)
@@ -281,24 +285,30 @@ def print_complex_list(complex_number_inserted:list):
             solution_subb.append(get_real_part(value)+ '' + get_imaginary_part(value) + 'i')
         else:
             solution_subb.append(get_real_part(value)+ '+' + get_imaginary_part(value) + 'i')
-    print(f"\nInserted numbers: \n{solution_subb}\n")    
+    if color == 'GREEN':
+        print(Fore.GREEN + f"\nInserted numbers: \n{solution_subb}\n" + Style.RESET_ALL)    
+    elif color == 'CYAN':
+        print(Fore.CYAN + f"\nInserted numbers: \n{solution_subb}\n" + Style.RESET_ALL)    
     
     
 def choose_option(complex_number_inserted:list):
     option = input("Choose option: ")
     if not valid(option):
         raise ValueError("You need to write a valid option!")
-    option_proceed(int(option),complex_number_inserted)
+    try:
+        option_proceed(int(option),complex_number_inserted)
+    except ValueError as e:
+        print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)
 
 def start():
     complex_number_inserted = generate_list()
     while True:
-        print_complex_list(complex_number_inserted)
+        print_complex_list(complex_number_inserted, 'CYAN')
         print_menu()
         try:
             choose_option(complex_number_inserted)
         except ValueError as e:
-            print("ERROR: "+ str(e))
+            print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)
 
 if __name__ == "__main__":
     start()
