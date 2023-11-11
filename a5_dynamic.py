@@ -205,7 +205,7 @@ def dynamic_problem(complex_number_inserted:list):
 #
 
 def create_complex_to_be_added(real_part:str,imaginary_part:str):
-    return [real_part, imaginary_part]
+    return (real_part, imaginary_part)
 def generate_list():
     return [] 
 
