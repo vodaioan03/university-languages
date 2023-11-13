@@ -12,53 +12,117 @@ from colorama import Fore, Style
 # Function for verification
 # Verification for option!
 def generate_list():
+    """
+    Generate an empty list for beginning
+    Returns:
+        Return an empty list
+        _type_: list
+    """
     return [] 
 
+def generate_random_number(complex_number_inserted:list):
+    """
+    We generate a random 10 complex numbers and add to list
+    Args:
+        complex_number_inserted (list): list of number inserted
+    """
+    for _ in range(0,10):
+        add_complex_number(f"{random.randint(1,120)} + {random.randint(0,100)}i",complex_number_inserted)
+    
+
 def valid(option_chosen:str):
-    if option_chosen.isnumeric() and int(option_chosen) in [1,2,3,4,5,6,7]:
+    """
+    We verify if option is a valid.
+    Args:
+        option_chosen (str): number of choosen option
+
+    Returns:
+        _type_: True if option is valid or False if option isn't valid
+    """
+    if option_chosen.isnumeric() and int(option_chosen) in [1,2,3,4,5,6,7,8,9]:
         return True
     return False
 def clear_list(complex_number_inserted:list):
+    """
+    Here you make the list empty.
+    Args:
+        complex_number_inserted (list): list of complex number represented
+    """
     complex_number_inserted.clear()
 
 
 def test_for_7(complex_number_inserted:list):
+    """
+    Here you have a predeterminated list of numbers. 
+    Args:
+        complex_number_inserted (list): list of complex numbers
+    """
     values = [ '1-i', '2+6i', '4-67i', '90+3i', '80-7i', '76+i', '43-12i', '3']
     for value in values:
         add_complex_number(str(value),complex_number_inserted)
 def test_for_12(complex_number_inserted:list):
+    """
+    Here you have a predeterminated list of numbers. 
+    Args:
+        complex_number_inserted (list): list of complex numbers
+    """
     values = [1, 3, 2, 4, 10, 6, 1]
     for value in values:
         add_complex_number(str(value),complex_number_inserted)
         
 # Proceed option and call what function he need
 def option_proceed(option_chosen:int,complex_number_inserted):
+    """
+    If option is valid we proceed the option and call specific function for each option
+    Args:
+        option_chosen (int): number of choosen option
+        complex_number_inserted (_type_): list of complex numbers
+
+    Raises:
+        ValueError:  raise a error if list is empty
+        ValueError:  raise a error if list is empty
+        ValueError:  raise a error if list is empty
+    """
     if option_chosen == 1:
         create_list_ui(complex_number_inserted)
     elif option_chosen == 2:
-        if len(complex_number_inserted) == 0:
-            raise ValueError("Inserted List is empty. You need to insert complex numbers.")
-        mountain_problem_ui(complex_number_inserted)
+        print_complex_list(complex_number_inserted, "GREEN")
     elif option_chosen == 3:
         if len(complex_number_inserted) == 0:
             raise ValueError("Inserted List is empty. You need to insert complex numbers.")
-        dynamic_problem_ui(complex_number_inserted)
+        mountain_problem_ui(complex_number_inserted)
     elif option_chosen == 4:
-        quit()
+        if len(complex_number_inserted) == 0:
+            raise ValueError("Inserted List is empty. You need to insert complex numbers.")
+        dynamic_problem_ui(complex_number_inserted)
     elif option_chosen == 5:
-        test_for_7(complex_number_inserted)
+        quit()
     elif option_chosen == 6:
-        test_for_12(complex_number_inserted)
+        test_for_7(complex_number_inserted)
     elif option_chosen == 7:
+        test_for_12(complex_number_inserted)
+    elif option_chosen == 8:
+        generate_random_number(complex_number_inserted)
+    elif option_chosen == 9:
         if len(complex_number_inserted) == 0:
             raise ValueError("Inserted List is empty. You need to insert complex numbers.")
         clear_list(complex_number_inserted)
 
 # Verify if the input is a complex number
 def valid_str(number:str):
+    """
+    Check if string is a valid complex number
+    Args:
+        number (str): input string
+
+    Returns:
+        _type_: True if is a complex number or false if isn't
+    """
     if len(number) == 0:
         return False
     number_split = split_number(number)
+    if len(number_split) == 1:
+        return True
     if len(number_split) != 2:
         return False
     if number_split[1][0] == "-":
@@ -75,6 +139,14 @@ def valid_str(number:str):
 
 # Split number in real part and imaginary part
 def split_number(number:str):
+    """
+    Split number in real part and imaginary part
+    Args:
+        number (str): string with complex number
+
+    Returns:
+        _type_: list of real part in position 0 and imaginary part in position 1
+    """
     if number.isnumeric():
         return [number, 0]
     sign_real = ''
@@ -89,7 +161,7 @@ def split_number(number:str):
         number_split = number.split("-")
         middle_sign = '-'
     if number_split == '':
-        return ''
+        return [sign_real + number, '0i']
     for char in number_split[0]:
         sign_real += char
     number_split[0] = sign_real.strip()
@@ -100,12 +172,28 @@ def split_number(number:str):
 
 # Verify if imaginary or real part is valid for complex number.
 def valid_number(part:str):
+    """
+    Check if part of number is ok
+    Args:
+        part (str): part of number
+
+    Returns:
+        _type_: True if have only digits and ".", false if he has another symbol
+    """
     for char in part:
         if not char.isdigit() and char != '.':
             return False
     return True
 # Extract imaginary part from input
 def divide_imaginary_part(imaginary_part_split:str):
+    """
+    Return imaginary part of number
+    Args:
+        imaginary_part_split (str): string with imaginart part
+
+    Returns:
+        _type_: imaginary part
+    """
     imaginary_part = ''
     if imaginary_part_split == 'i':
         return '1'
@@ -120,12 +208,26 @@ def divide_imaginary_part(imaginary_part_split:str):
 # Problem Sloving
 
 def mountain_problem_ui(complex_number_inserted:list):
+    """
+    UI Function for solving problem number 7
+    Args:
+        complex_number_inserted (list): list of number
+    """
     max_subb, len_max_subb = mountain_problem(complex_number_inserted)
     print(Fore.GREEN +f"\nThe length of max subbaray form of a montain: {len_max_subb}" + Style.RESET_ALL)
     print(Fore.GREEN + f"The subbaray form of a montain:"+ Style.RESET_ALL)
     print_complex_list(max_subb, 'GREEN')
 
 def mountain_problem(complex_number_inserted:list):
+    """
+    Logical Function for solving problem number 7
+    
+    Go in list at each element and verify if every elemnts from position i makes the longest subarray 
+    Keep the longest subbaray and length and return at the end
+    Complexity: O(n^2)
+    Args:
+        complex_number_inserted (list): list of number
+    """
     max_subarray = [complex_number_inserted[0]]
     len_max_subarray = 1
     current_subarray = []
@@ -165,11 +267,31 @@ def mountain_problem(complex_number_inserted:list):
     return max_subarray, len_max_subarray
 
 def dynamic_problem_ui(complex_number_inserted:list):
+    """
+    UI Function for solving problem number 12
+    Args:
+        complex_number_inserted (list): list of number
+    """
     solution_list, length = dynamic_problem(complex_number_inserted)
     print(Fore.GREEN + f"The length and elements of a longest alternating subsequence, when considering each number's real part. Length: {length}" + Style.RESET_ALL)
     print_complex_list(solution_list, 'GREEN')
 
 def dynamic_problem(complex_number_inserted:list):
+    """
+    Logical Function for solving problem number 12
+    - make a matrix with 2 columns and length of complex number list rows and make 1 at the beggining
+        at  column 0 we put Legth of the longest alternating subsequence  ending at index i and last element is greater than its previous element
+        at column 1 we put Length of the longest alternating subsequence  ending at index i and last element is smaller than its previous element
+    - take maximum length and go from bottom to top and search all numbers who makes the length
+    - return the length and list
+    Complexity: O(n^2)
+    Args:
+        complex_number_inserted (list): list of number
+
+    Returns:
+        result: list of complex numbers 
+        length: integer, length of answer
+    """
     length_of_list = len(complex_number_inserted)
     if length_of_list == 0:
         return []
@@ -197,7 +319,7 @@ def dynamic_problem(complex_number_inserted:list):
             result.append(complex_number_inserted[i])
             max_length -= 1
     max_length = max(max(dp))
-    return result[::-1], max_length
+    return result, max_length
 
 # 
 # Write below this comment 
@@ -208,12 +330,37 @@ def dynamic_problem(complex_number_inserted:list):
 #
 
 def create_complex_to_be_added(real_part:str,imaginary_part:str):
+    """
+    Add real part and imaginary part in a tuple
+    Args:
+        real_part (str): real part from complex number
+        imaginary_part (str): imaginary part from complex number
+
+    Returns:
+        _type_: tuple of number
+    """
     return (real_part, imaginary_part)
 
 def get_imaginary_part(number:list):
+    """
+    Take imaginary part from list
+    Args:
+        number (list): list for complex number
+
+    Returns:
+        _type_: imaginary part
+    """
     return number[1]
 
 def get_real_part(number:list):
+    """
+    Take real part from list
+    Args:
+        number (list): list for complex number
+
+    Returns:
+        _type_: real part
+    """
     return number[0]
 
 #
@@ -225,12 +372,37 @@ def get_real_part(number:list):
 #
 #=========================================================================
 # def create_complex_to_be_added(real_part:str,imaginary_part:str):
+#     """
+#     Add real part and imaginary part in a dict
+#     Args:
+#         real_part (str): real part from complex number
+#         imaginary_part (str): imaginary part from complex number
+
+#     Returns:
+#         _type_: dict of number
+#     """
 #     return {"real": real_part, "imaginary": imaginary_part}
 
 # def get_imaginary_part(number:list):
+#     """
+#     Take imaginary part from dict
+#     Args:
+#         number (list): list for complex number
+
+#     Returns:
+#         _type_: imaginary part
+#     """
 #     return number['imaginary']
 
 # def get_real_part(number:list):
+#     """
+#     Take real part from dict
+#     Args:
+#         number (list): list for complex number
+
+#     Returns:
+#         _type_: real part
+#     """
 #     return number['real']
 
 #
@@ -242,6 +414,11 @@ def get_real_part(number:list):
 #
 
 def create_list_ui(complex_number_inserted:list):
+    """
+    Ui Insert and add number in list
+    Args:
+        complex_number_inserted (list): list of numbers
+    """
     number = input("Type the complex number(a+bi): ")
     try:
         add_complex_number(number,complex_number_inserted)
@@ -249,6 +426,18 @@ def create_list_ui(complex_number_inserted:list):
         print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)
 
 def add_complex_number(number:str,complex_number_inserted):
+    """   
+    Logical function for adding a number in list
+    Args:
+        number (str): complex number
+        complex_number_inserted (_type_): list of complex numbers
+
+    Raises:
+        ValueError: for incorrent number
+
+    Returns:
+        _type_: list of numbers
+    """
     if number.isnumeric():
         number += ' + 0i'
     if not valid_str(number.strip()):
@@ -267,16 +456,27 @@ def add_complex_number(number:str,complex_number_inserted):
 #
 
 def print_menu():
+    """
+    Function for printing menu with options
+    """
     print("Menu for Complex Numbers")
     print("1. Add complex number to list(Initially list is empty).")
-    print("2. [7]Show length and elements of a longest subbaray where imaginary part is in form of a mountain.")
-    print("3. [12]Length and elements of a alternating subsequence.")
-    print("4. Exit")
-    print("5. Test for 2 list: [ '1-i', '2+6i', '4-67i', '90+3i', '80-7i', '76+i', '43-12i', '3']")
-    print("6. Test for 3 list: [1, 3, 2, 4, 10, 6, 1]")
-    print("7. Clear inserted list.")
+    print("2. Display The List")
+    print("3. [7]Show length and elements of a longest subbaray where imaginary part is in form of a mountain.")
+    print("4. [12]Length and elements of a alternating subsequence.")
+    print("5. Exit")
+    print("6. Test for 2 list: [ '1-i', '2+6i', '4-67i', '90+3i', '80-7i', '76+i', '43-12i', '3']")
+    print("7. Test for 3 list: [1, 3, 2, 4, 10, 6, 1]")
+    print("8. Generate 10 random numbers:")
+    print("9. Clear inserted list.")
 
 def print_complex_list(complex_number_inserted:list, color:str):
+    """
+    Printing list of number as a+bi
+    Args:
+        complex_number_inserted (list): list of number
+        color (str): color for console
+    """
     solution_subb = []
     for value in complex_number_inserted:
         imaginary_part = get_imaginary_part(value)
@@ -291,6 +491,14 @@ def print_complex_list(complex_number_inserted:list, color:str):
     
     
 def choose_option(complex_number_inserted:list):
+    """
+    Here you choose your option and check if is ok
+    Args:
+        complex_number_inserted (list): list of numbers
+
+    Raises:
+        ValueError: if option isn't valid
+    """
     option = input("Choose option: ")
     if not valid(option):
         raise ValueError("You need to write a valid option!")
@@ -300,6 +508,9 @@ def choose_option(complex_number_inserted:list):
         print(Fore.RED + "ERROR: " + str(e) + Style.RESET_ALL)
 
 def start():
+    """
+    Function for starting program
+    """
     complex_number_inserted = generate_list()
     while True:
         print_complex_list(complex_number_inserted, 'CYAN')
