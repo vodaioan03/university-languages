@@ -1,5 +1,5 @@
 from src.ui.ui_class import *
-
+#not finished
 if __name__ == "__main__":
 #  rep = 'Memory'
   rep = 'Text'
