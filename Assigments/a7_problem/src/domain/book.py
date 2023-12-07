@@ -15,4 +15,16 @@ class Book:
     return {"isbn": self.isbn,
             "author": self.author,
             "title": self.title}
+    
+  @property
+  def getisbn(self):
+    return self.isbn
+  
+  @property
+  def getauthor(self):
+    return self.author
+  
+  @property
+  def gettitle(self):
+    return self.title
   
