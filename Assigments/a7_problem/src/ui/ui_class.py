@@ -15,27 +15,23 @@ class Tests:
     self.logic.add_book("004","marcel ciolacu","maris  ")
     self.logic.add_book("005","marcel ciolacu","maris weqeqw 2 123 dff wd qw dd")
     self.logic.add_book("006","asta nu e marcel ciolacu","Titlu de smecher de barosa")
-    self.logic.display_list_of_books()
+    self.display_list_of_books()
     self.logic.filter_list('maris')
-    print("dupa del de title")
-    self.logic.display_list_of_books()
+    self.display_list_of_books()
     self.logic.undo_last_operation()
-    print("dupa primul undo")
-    self.logic.display_list_of_books()
+    self.display_list_of_books()
 
 
 class UI:
   
-  def __init__(self,rep,filename,test_filename):
+  def __init__(self,rep,filename):
     self.__start = True
     self.__rep = rep
-    self.__test_filename = test_filename
     self.__filename = filename
     self.__logic = LogicalThings(self.__rep,self.__filename)
     self.__checks = VerifyInput(self.__logic)
-    #self.__tests = Tests(self.__rep,self.__test_filename)
-    #self.__tests.test_for_add()
-    self.__add_values_at_start()
+    if rep =="Memory":
+      self.__add_values_at_start()
       
   
   #ONLY FOR TESTING NOW
@@ -85,7 +81,7 @@ class UI:
     elif option == 2:
       try:
         self.__checks.verify_display()
-        self.__logic.display_list_of_books()
+        self.display_list_of_books()
       except ValueError as e:
         print(e)
     elif option == 3:
@@ -101,6 +97,14 @@ class UI:
         self.__logic.undo_last_operation()
       except ValueError as e:
         print(e)
+        
+  def display_list_of_books(self):
+    """_summary_
+    """
+    books = self.__logic.get_book_for_display()
+    for book in books:
+      string = f'[{books.index(book)}] {book.isbn} | {book.author} | {book.title}'
+      print(string)
       
   
   

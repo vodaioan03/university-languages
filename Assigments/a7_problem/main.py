@@ -1,10 +1,14 @@
 from src.ui.ui_class import *
-#not finished
+import tests
+import unittest
+import configparser
+
 if __name__ == "__main__":
-#  rep = 'Memory'
-  rep = 'Text'
-#  rep = 'Pickle'
-  filename = "C:\\Users\\vodai\\OneDrive\\Desktop\\CS 2023 SEM 1\\FP 2023\\a7-vodaioan03\\src\\repository\\input.txt"
-  test_filename = "C:\\Users\\vodai\\OneDrive\\Desktop\\CS 2023 SEM 1\\FP 2023\\a7-vodaioan03\\src\\repository\\test.txt"
-  ui = UI(rep,filename,test_filename)
+  config = configparser.RawConfigParser()
+  config.read('config.properties')
+  rep = config.get('RepositorySection','repository.name')
+  filename = config.get('RepositorySection',f'repository.filename_for_{rep.lower()}')
+  test_suite = unittest.defaultTestLoader.loadTestsFromModule(tests)
+  
+  ui = UI(rep,filename)
   ui.start()

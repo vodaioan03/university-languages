@@ -1,52 +1,66 @@
 import pickle
 import copy
 import os
-from src.repository.memoryrep import RepositoryError
+#from src.repository.repository import RepositoryError, Repository
+from src.repository.memoryrep import RepositoryError, Memory
 
-class Pickle():
+class Pickle(Memory):
   
   def __init__(self,file_name) -> None:
-    print("init pickle")
+    """Pickle init for Repository
+
+    Args:
+        file_name (_type_): file name for saving
+    """
     self.__file_name = file_name
-    self.__data = [[]]
+    super().__init__()
     self.__load_file()
   
   def add_book(self,list):
-    print("Add book Pickle")
-    new_list = copy.deepcopy(self.__data[-1])
-    new_list.append(list)
-    self.__data.append(new_list)
+    """Adding book and saving
+
+    Args:
+        list (_type_): id class to be saved
+    """
+    super().add_book(list)
     self.__save_file()
-    
-  def get_books(self):
-    print("Get book Pickle")
-    return self.__data[-1]
   
   def undo_list(self):
-    print("Undo List Pickle")
-    self.__data.pop()
+    """Undo list and saving in file
+    """
+    super().undo_list()
     self.__save_file()
     
   def __save_file(self):
-      file = open(self.__file_name, "wb")  
-      pickle.dump(self.__data, file)
-      file.close()
+    """Save file in pickle folder
+    """
+    file = open(self.__file_name, "wb")  
+    pickle.dump(self._data, file)
+    file.close()
 
   def __load_file(self):
-      try:
-          if os.path.getsize(self.__file_name) > 0: 
-            file = open(self.__file_name, "rb") 
-            self.__data = pickle.load(file)
-            file.close()
-      except FileNotFoundError:
-          raise RepositoryError("File not found.")
-      except OSError:
-          raise RepositoryError("Cannot start repository")
+    """Load file in pickle foler
 
-  def __len__(self):
-      return len(self.__data)
+    Raises:
+        RepositoryError: File not found.
+        RepositoryError: Cannot start repository
+    """
+    try:
+        if os.path.getsize(self.__file_name) > 0: 
+          file = open(self.__file_name, "rb") 
+          self._data = pickle.load(file)
+          file.close()
+    except FileNotFoundError:
+        raise RepositoryError("File not found.")
+    except OSError:
+        raise RepositoryError("Cannot start repository")
     
   def modify_list(self,new_list):
-    print("Modify List Pickle")
-    self.__data.append(new_list)
+    """Modify list and savinf
+
+    Args:
+        new_list (list): new list for modify
+    """
+    super().modify_list(new_list)
     self.__save_file()
+    

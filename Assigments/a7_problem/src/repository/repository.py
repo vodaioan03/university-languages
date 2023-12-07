@@ -1,5 +1,5 @@
 import copy
-#from src.repository.repository import RepositoryError, Repository
+from src.domain.book import *
 
 class RepositoryError(Exception):
     """_summary_
@@ -35,9 +35,9 @@ class RepositoryError(Exception):
       """
       return self.__message
 
-class Memory:
-    
-  def __init__(self,filename = "") -> None:
+class Repository:
+  
+  def __init__(self) -> None:
     """Define data with a null list.
     """
     self._data = [[]]

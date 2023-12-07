@@ -5,10 +5,10 @@ import json
 #from src.repository.repository import RepositoryError, Repository
 from src.repository.memoryrep import RepositoryError, Memory
 from src.domain.book import *
-class Text(Memory):
+class JSON(Memory):
   
   def __init__(self,file_name) -> None:
-    """TestFile init for Repository
+    """JSON init for Repository
 
     Args:
         file_name (_type_): file name for saving
@@ -42,18 +42,17 @@ class Text(Memory):
     self.__save_file()
     
   def __save_file(self):
-    """Save file in text file folder
+    """Save file in JSON folder
     """
-    self.File_object = open(self.__file_name ,"w")
-    strings = ''
+    json_data = []
     for each in self._data[-1]:
-      strings += f"{each.isbn},{each.author},{each.title} \n"
-    self.File_object.write(strings)
-    self.File_object.close()
+       json_data.append(each.serialize())
+    with open(self.__file_name, "w") as outfile:
+      json.dump(json_data,outfile)
     
        
   def __load_file(self):
-    """Load file in text file foler
+    """Load file in JSON foler
 
     Raises:
         RepositoryError: File not found.
@@ -61,17 +60,18 @@ class Text(Memory):
     """
     try:
         if os.path.getsize(self.__file_name) > 0: 
+          file = open(self.__file_name) 
+          line = json.load(file)
           books = []
-          line = ''
-          with open(self.__file_name, "r")  as file:
-            line = file.readlines()
           for each in line:
-            line_splited = each.split(",")
-            books.append([copy.deepcopy(line_splited[0].strip()),copy.deepcopy(line_splited[1].strip()),copy.deepcopy(line_splited[2].strip())])
+            line_splited = each
+            books.append([copy.deepcopy(line_splited["isbn"].strip()),copy.deepcopy(line_splited["author"].strip()),copy.deepcopy(line_splited["title"].strip())])
           self._data.append([])
           for each in books:
             self._data[-1].append(Book(each[0],each[1],each[2]))
+          file.close()
     except FileNotFoundError:
         raise RepositoryError("File not found.")
     except OSError:
         raise RepositoryError("Cannot start repository")
+       
