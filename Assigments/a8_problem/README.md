@@ -69,11 +69,11 @@ Write an application for a book library. The application will store:
 
 Create an application to:
 1. Manage clients and books. The user can add, remove, update, and list both clients and books. [DONE]
-2. Rent or return a book. A client can rent an available book. A client can return a rented book at any time. Only available books (those which are not currently rented) can be rented.
-3. Search for clients or books using any one of their fields (e.g. books can be searched for using id, title or author). The search must work using case-insensitive, partial string matching, and must return all matching items.
+2. Rent or return a book. A client can rent an available book. A client can return a rented book at any time. Only available books (those which are not currently rented) can be rented. [DONE]
+3. Search for clients or books using any one of their fields (e.g. books can be searched for using id, title or author). The search must work using case-insensitive, partial string matching, and must return all matching items.[DONE]
 4. Create statistics:
-    - Most rented books. This will provide the list of books, sorted in descending order of the number of times they were rented.
-    - Most active clients. This will provide the list of clients, sorted in descending order of the number of book rental days they have (e.g. having 2 rented books for 3 days each counts as 2 x 3 = 6 days).
+    - Most rented books. This will provide the list of books, sorted in descending order of the number of times they were rented. [DONE]
+    - Most active clients. This will provide the list of clients, sorted in descending order of the number of book rental days they have (e.g. having 2 rented books for 3 days each counts as 2 x 3 = 6 days).[DONE]
     - Most rented author. This provides the list of book authors, sorted in descending order of the number of rentals their books have.
 
 ### 5. Activity Planner

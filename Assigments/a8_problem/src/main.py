@@ -1,3 +1,4 @@
+#TODO EXCEPTIONS CLASSES
 
 from ui.ui_conolse import UI
 
