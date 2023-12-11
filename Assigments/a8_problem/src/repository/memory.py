@@ -1,8 +1,6 @@
 
 from domain.idobject import IdObject
-
-class RepositoryError(Exception):
-  pass
+from ui.errors import *
 
 class RepositoryCounter:
     def __init__(self, data: list):
@@ -26,7 +24,7 @@ class Memory:
         raise TypeError("Can only add IdObject instances")
 
     if object.id in self.__data.keys():
-        raise RepositoryError("Already exists.")
+        raise ValidationException("Already exists.")
 
     self.__data[object.id] = object
     
@@ -35,7 +33,7 @@ class Memory:
         raise TypeError("Can only add IdObject instances")
 
     if not object.id in self.__data.keys():
-        raise RepositoryError("This object doesen't exist.")
+        raise ValidationException("This object doesen't exist.")
     del self.__data[object.id]
     
   def __iter__(self):

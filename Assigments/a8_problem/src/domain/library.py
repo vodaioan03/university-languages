@@ -2,6 +2,7 @@
 
 from domain.idobject import IdObject
 from datetime import date, timedelta, datetime
+from ui.errors import *
 
 class Book(IdObject):
   

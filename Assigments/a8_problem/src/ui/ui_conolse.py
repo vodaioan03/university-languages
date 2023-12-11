@@ -1,7 +1,7 @@
-from repository.memory import Memory, RepositoryError
+from repository.memory import Memory
 from services.requirments import *
 from domain.library import Book, Client, Rental
-
+from ui.errors import *
 
 class UI:
   
@@ -30,7 +30,7 @@ class UI:
     if command in self.__commands:
       self.__commands[command]()
     else:
-      raise ValueError("Invalid command!")
+      raise OptionError("Invalid command!")
   
   def __print_menu_for_manage(self):
     print("1. Add Client")
@@ -48,10 +48,10 @@ class UI:
     if command in self.__managecomm:
       try:
         self.__managecomm[command]()
-      except RepositoryError as e:
+      except ValidationException as e:
         print(e)
     else:
-      raise ValueError("Invalid command!")
+      raise OptionError("Invalid command!")
   
   def __addclient(self):
       client_id = input("Client id: ").strip()
@@ -121,8 +121,8 @@ class UI:
         search_name = input("Type name for search: ").strip()
         found = self.__clientlogical.search_client_name(search_name)
       else:
-        raise ValueError("Incorrect option!")
-    except ValueError as e:
+        raise OptionError("Incorrect option!")
+    except ValidationException as e:
       print(e)
     print(f"WE found {len(found)} clients \n")
     for each in found:
@@ -150,8 +150,8 @@ class UI:
         search_author = input("Type author for search: ").strip()
         found = self.__bookslogical.search_book_author(search_author)
       else:
-        raise ValueError("Incorrect option!")
-    except ValueError as e:
+        raise OptionError("Incorrect option!")
+    except ValidationException as e:
       print(e)
     print(f"WE found {len(found)} books \n")
     print(found)
@@ -180,13 +180,13 @@ class UI:
     months = {"01":31,"02":28,"03":31,"04":30,"05":31,"06":30,"07":31,"08":31,"09":30,"10":31,"11":30,"12":31}
     string_splitted = string.split(".")
     if len(string_splitted) != 3:
-      raise ValueError("The date is incorrect!")
+      raise OptionError("The date is incorrect!")
     if not string_splitted[1].strip() in months:
-      raise ValueError("The month is incorrect! Please type (01-12)")
+      raise OptionError("The month is incorrect! Please type (01-12)")
     if months[string_splitted[1]] < int(string_splitted[0].strip()):
-      raise ValueError("The date is incorrect! Please type the correct day. Between 01-31")
+      raise OptionError("The date is incorrect! Please type the correct day. Between 01-31")
     if int(string_splitted[2].strip()) < 2023:
-      raise ValueError("Incorrect year. Type the correct date.")
+      raise OptionError("Incorrect year. Type the correct date.")
   
   def __rent(self):
     rental_id = int(input("Rental ID: ").strip())
@@ -205,9 +205,14 @@ class UI:
   
   
   def start(self):
+    self.__bookslogical._addbooks()
+    self.__clientlogical.add_clients()
+    self.__rentallogic.add_rentals()
     while self.__is_running:
       self.__print_menu()
       try:
         self.__input_command()
-      except ValueError as e:
+      except ValidationException as e:
         print(e)
+      except ValueError as e:
+        print("You wrote wrong parameters.")

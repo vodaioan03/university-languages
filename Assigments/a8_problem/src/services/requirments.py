@@ -4,6 +4,7 @@ from repository.memory import Memory
 from faker import Faker
 import random
 from datetime import date,timedelta
+from ui.errors import *
 
 class BooksRental:
     def __init__(self, book: Book, day_count: int):
@@ -79,7 +80,6 @@ class RentalLogic:
     self.__rentals_repo = Memory()
     self.__clients_repo = client_rep
     self.__books_repo = book_rep
-    self.add_rentals()
     
   def show_rentals(self):
     return self.__rentals_repo.get_all
@@ -89,31 +89,31 @@ class RentalLogic:
     book = self.__books_repo.find(book_id)
     rental = self.__rentals_repo.find(rental_id)
     if not book:
-      raise ValueError("Book doesen't exist.")
+      raise NoBookExist("Book doesen't exist.")
     if not client:
-      raise ValueError("Client doesen't exist.")
+      raise ClientError("Client doesen't exist.")
     if book.rented:
-      raise ValueError("The book already rented.")
+      raise NoBookExist("The book already rented.")
     if rental == None:
       self.__rentals_repo.add(Rental(rental_id,client,book,rental_date,end_date))
     else:
-      raise ValueError("Rental already exist.")
+      raise RentalError("Rental already exist.")
     
   def return_book(self,client_id:int,book_id:int):
     client = self.__clients_repo.find(client_id)
     book = self.__books_repo.find(book_id)
     rentals = self.__rentals_repo.get_all
     if not book:
-      raise ValueError("Book doesen't exist.")
+      raise NoBookExist("Book doesen't exist.")
     if not client:
-      raise ValueError("Client doesen't exist.")
+      raise ClientError("Client doesen't exist.")
     if not book.rented:
-      raise ValueError("The book isn't rented.")
+      raise NoBookExist("The book isn't rented.")
     for each in rentals:
       if rentals[each].client == client and rentals[each].book == book:
         self.__rentals_repo.delete(rentals[each])
         return
-    raise ValueError("Rental doesen't exist.")
+    raise RentalError("Rental doesen't exist.")
    
   def statistics_for_books(self):
     all_rentals = {}
@@ -193,7 +193,6 @@ class RentalLogic:
 class BookLogic:
   def __init__(self) -> None:
     self.__books_repo = Memory()
-    self.__addbooks()
     
   @property
   def bookrepo(self):
@@ -207,7 +206,7 @@ class BookLogic:
     if book_id in all_books:
       book_id = all_books[book_id]
     else:
-      raise ValueError("Book doesen't exist.")
+      raise NoBookExist("Book doesen't exist.")
     self.__books_repo.delete(book_id)
     
     
@@ -216,7 +215,7 @@ class BookLogic:
     if book_id in all_books:
       book_id = all_books[book_id]
     else:
-      raise ValueError("Book doesen't exist.")
+      raise NoBookExist("Book doesen't exist.")
     book_id.update_book(title,author)
   
   def search_book_id(self,book_id:int):
@@ -247,7 +246,7 @@ class BookLogic:
         books_found.append(books[each])
     return books_found
   
-  def __addbooks(self):
+  def _addbooks(self):
     fake = Faker()
     list_authors = [fake.name() for _ in range(75)]
     list_title = [fake.name() for _ in range(75)]
@@ -259,8 +258,7 @@ class ClientLogic:
   
   def __init__(self) -> None:
     self.__clients_repo = Memory()
-    self.add_clients()
-   
+
   @property
   def clientrepo(self):
     return self.__clients_repo  
@@ -273,7 +271,7 @@ class ClientLogic:
     if client_id in all_clients:
       client_id = all_clients[client_id]
     else:
-      raise ValueError("Client doesen't exist.")
+      raise ClientError("Client doesen't exist.")
     self.__clients_repo.delete(client_id)
     
   def update_client(self,client_id,new_name):
@@ -281,7 +279,7 @@ class ClientLogic:
     if client_id in all_clients:
       client_id = all_clients[client_id]
     else:
-      raise ValueError("Client doesen't exist.")
+      raise ClientError("Client doesen't exist.")
     client_id.update_client(new_name)
   
   def show_list_with_clients(self):

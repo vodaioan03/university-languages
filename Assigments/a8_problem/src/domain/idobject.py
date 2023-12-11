@@ -1,3 +1,4 @@
+from ui.errors import *
 class IdObject:
     def __init__(self, _id: int):
         if not isinstance(_id, int):
