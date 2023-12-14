@@ -124,6 +124,9 @@ class UI:
         raise OptionError("Incorrect option!")
     except ValidationException as e:
       print(e)
+    if len(found) == 0:
+      print("No clients found.")
+      return
     print(f"WE found {len(found)} clients \n")
     for each in found:
       print(each)
@@ -153,6 +156,9 @@ class UI:
         raise OptionError("Incorrect option!")
     except ValidationException as e:
       print(e)
+    if len(found) == 0:
+      print("No books found.")
+      return
     print(f"WE found {len(found)} books \n")
     print(found)
     for each in found:
