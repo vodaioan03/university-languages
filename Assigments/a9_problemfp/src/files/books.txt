@@ -1,33 +1,34 @@
-0,0,0,False 
-1,1,1,False 
-2,2,2,False 
-3,3,3,True 
-4,4,4,False 
-5,5,5,True 
-6,6,6,False 
-7,7,7,False 
-8,8,8,False 
-9,9,9,False 
-10,10,10,False 
-11,11,11,False 
-12,12,12,False 
-13,13,13,False 
-14,14,14,True 
-15,15,15,True 
-16,16,16,True 
-17,17,17,False 
-18,18,18,True 
-19,19,19,False 
-20,20,20,True 
-21,21,21,True 
-22,22,22,True 
-23,23,23,False 
-25,25,25,True 
-26,26,26,False 
-27,27,27,True 
-28,28,28,False 
-29,29,29,True 
-99,99,99,False 
-100,100,100,False 
-102,102,102,False 
-24,24,24,True 
+0,Nicholas Nguyen,Johnny Franklin,False 
+1,Megan Stewart,Kristen Hayes,False 
+2,Robert Holt,Kevin Robinson,False 
+3,Thomas Campbell,Andrea Rios,True 
+4,Joel Hinton,Andrew Henry,False 
+5,Eric Garner,Kevin Robinson,True 
+6,Megan Stewart,Megan Nelson,False 
+7,Joel Hinton,Tiffany Lopez,False 
+8,William Williams,Ashley Paul,False 
+9,Scott Curtis,Jill Phillips,False 
+10,Megan Stewart,Susan Morales,False 
+11,Derrick Wright,Susan Morales,False 
+12,Brian Greer,John Jones,False 
+13,Christopher Williamson,Mr. William Aguirre,False 
+14,Jordan Costa,Tammy Calderon,True 
+15,Jill Chan,Tiffany Lopez,True 
+16,William Williams,Brenda Kelley,True 
+17,Nicholas Nguyen,Carolyn Anderson,False 
+18,Caleb Boyer,Ruben Gonzales,True 
+19,Derrick Wright,Brian Duke DVM,False 
+20,Michele Hill,Christine Lewis,True 
+21,William Douglas,Tracy Sawyer,True 
+22,Kayla Owens,Spencer Miller,True 
+23,Megan Stewart,Jason Miller,False 
+24,Stephen Ruiz,Hannah Hill,False 
+25,Jordan Costa,Mr. Christopher Garcia,True 
+26,Michael Mason,John Jones,False 
+27,Larry Larson,Leah Stewart,True 
+28,Jose Lee,Mario Johnson,False 
+29,Jose Lee,Amy Miller,True 
+789,Title new,title book,False 
+1029,New author yyyyyyyyyyy,New title zzzzzzzz,False 
+1030,Mikel,Harry Potter,False 
+1031,xxxxxxxxxxxxxx,rnheew,False 

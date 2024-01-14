@@ -121,6 +121,9 @@ class Text(Memory):
     super().delete(object)
     self.__save_file()
     return object
+    
+  def _save_modify(self):
+    self.__save_file()
      
   def __save_file(self):
     """Save file in text file folder
@@ -157,7 +160,7 @@ class Text(Memory):
             if self.__class_rep == 'Client':
               object = getattr(sys.modules[__name__], self.__class_rep)(int(each[0]),each[1].strip())
             elif self.__class_rep == 'Book':
-              object = getattr(sys.modules[__name__], self.__class_rep)(int(each[0]),each[1],each[0])
+              object = getattr(sys.modules[__name__], self.__class_rep)(int(each[0]),each[2],each[1])
             elif self.__class_rep == 'Rental':
               client = self.__clients_rep.find(int(each[1]))
               book = self.__books_rep.find(int(each[2]))

@@ -293,6 +293,7 @@ class BookLogic:
     fredo = FunctionCall(book_id.update_book, title,author)
     fundo = FunctionCall(book_id.update_book, actual_title,actual_author)
     self.__undo_service.record(Operation(fundo, fredo))
+    self.bookrepo._save_modify()
   
   def search_book_id(self,book_id:int):
     books = self.__books_repo.get_all
@@ -373,6 +374,7 @@ class ClientLogic:
     fredo = FunctionCall(client_id.update_client, new_name)
     fundo = FunctionCall(client_id.update_client, actual_name)
     self.__undo_service.record(Operation(fundo, fredo))
+    self.clientrepo._save_modify()
   
   def show_list_with_clients(self):
     return self.__clients_repo.get_all
