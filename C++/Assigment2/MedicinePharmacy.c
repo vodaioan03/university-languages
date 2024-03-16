@@ -39,6 +39,17 @@ int sortingChoose() {
 	return sortOrdin;
 
 }
+int sortingChooseNameQuantity() {
+	int sortOrdin;
+	printf("\nChoose Sorting");
+	printf("\n1. Name");
+	printf("\n2. Quantity\n");
+	printf("Choose Sorting [1/2]:");
+	scanf("%d", &sortOrdin);
+	if (sortOrdin != 1 && sortOrdin != 2) return 0;
+	return sortOrdin;
+
+}
 
 //TODO De revizuit
 void manageOperation(int operation, Repository* repository) {
@@ -48,8 +59,9 @@ void manageOperation(int operation, Repository* repository) {
 	int price;
 	int sizeIndexFound = 0;
 	int sortOrdin = 0;
-	int* indexFound = (int*)malloc(repository->pharmacy->size * sizeof(int));
-
+	int nameSort = 0;
+	int* indexFound = (int*)malloc(getPharmacy(repository)->size * sizeof(int));
+	int opSucces = 0;
 	switch (operation)
 	{
 	case 1:
@@ -62,10 +74,10 @@ void manageOperation(int operation, Repository* repository) {
 		printf("\n[4/4]Type the price for %s:", name);
 		scanf("%d", &price);
 		addMedicineLogic(repository,name, concentration, quantity, price);
-		printMedicine(repository->pharmacy, (repository->pharmacy->size)-1);
+		printMedicine(getPharmacy(repository), (getPharmacy(repository)->size)-1);
 		break;
 	case 2:
-		if (repository->pharmacy->size == 0) {
+		if (getPharmacy(repository)->size == 0) {
 			printf("\n\nPharmacy is empty. First you need to add a medicine.\n\n");
 			break;
 		}
@@ -79,7 +91,7 @@ void manageOperation(int operation, Repository* repository) {
 		}
 		break;
 	case 3:
-		if (repository->pharmacy->size == 0) {
+		if (getPharmacy(repository)->size == 0) {
 			printf("\n\nPharmacy is empty. First you need to add a medicine.\n\n");
 			break;
 		}
@@ -104,36 +116,76 @@ void manageOperation(int operation, Repository* repository) {
 			break;
 		}
 	case 4:
-		//TODO sa alegi dupa ce sa cauti, nume,price,concentration
-		printf("\n[1/1] Type the name for the medicine: ");
-		getchar();
-		fgets(name, sizeof(name), stdin);
-		name[strcspn(name, "\n")] = '\0';
-		sortOrdin = sortingChoose();
-		if (sortOrdin == 0) return;
-		searchAllMedicineString(repository, name, &sizeIndexFound,&indexFound,sortOrdin);
-		printf("\n %d results found! \n", sizeIndexFound);
-		for (int i = 0; i < sizeIndexFound; i++) {
-			printMedicine(repository->pharmacy, (indexFound)[i]);
+		nameSort = sortingChooseNameQuantity();
+		if (nameSort == 0) return;
+		if (nameSort == 2) {
+			printf("\n[1/1] Type the quantity for the medicine: ");
+			getchar();
+			fgets(name, sizeof(name), stdin);
+			name[strcspn(name, "\n")] = '\0';
+			sortOrdin = sortingChoose();
+			int quantitySearch = atoi(name);
+			if (strlen(name) == 0) { printf("\nYou can't search with empty quantity. If you wan't to see entire list, search by name with empty string."); }
+			if (sortOrdin == 0) return;
+			if (sortOrdin == 1) {
+				searchAllMedicineQuantity(repository, quantitySearch, &sizeIndexFound, &indexFound, &sortArrayByNameAscending);
+			}
+			else {
+				searchAllMedicineQuantity(repository, quantitySearch, &sizeIndexFound, &indexFound, &sortArrayByNameDescending);
+			}
+			printf("\n %d results found! \n", sizeIndexFound);
+			for (int i = 0; i < sizeIndexFound; i++) {
+				printMedicine(getPharmacy(repository), (indexFound)[i]);
+			}
+		}
+		else if (nameSort == 1) {
+			printf("\n[1/1] Type the name for the medicine: ");
+			getchar();
+			fgets(name, sizeof(name), stdin);
+			name[strcspn(name, "\n")] = '\0';
+			sortOrdin = sortingChoose();
+			if (sortOrdin == 0) return;
+			if (sortOrdin == 1) {
+				searchAllMedicineString(repository, name, &sizeIndexFound, &indexFound, &sortArrayByNameAscending);
+			}
+			else {
+				searchAllMedicineString(repository, name, &sizeIndexFound, &indexFound, &sortArrayByNameDescending);
+			}
+			printf("\n %d results found! \n", sizeIndexFound);
+			for (int i = 0; i < sizeIndexFound; i++) {
+				printMedicine(getPharmacy(repository), (indexFound)[i]);
+			}
 		}
 		break;
 	case 5:
-		//TODO: de bagat sa fie printate in ordine
 		printf("\n[1/1] Type the minimum supply for search:");
 		scanf("%d", &quantity);
 		sortOrdin = sortingChoose();
 		if (sortOrdin == 0) return;
-		showAllMedicineBySupply(repository, quantity,&sizeIndexFound,&indexFound,sortOrdin);
+		if (sortOrdin == 1) {
+			showAllMedicineBySupply(repository, quantity, &sizeIndexFound, &indexFound, &sortArrayByNameAscending);
+		}
+		else {
+			showAllMedicineBySupply(repository, quantity, &sizeIndexFound, &indexFound, &sortArrayByNameDescending);
+		}
 		printf("\n %d results found! \n", sizeIndexFound);
 		for (int i = 0; i < sizeIndexFound; i++) {
-			printMedicine(repository->pharmacy, (indexFound)[i]);
+			printMedicine(getPharmacy(repository), (indexFound)[i]);
 		}
 		break;
 	case 6:
-		undoOperation();
+		opSucces = undoOperationLogic(repository);
+		if (opSucces == 0) {
+			printf("No more undos!\n");
+		}
+		else { printf("Undo succes! Remaining %d \n",opSucces); }
 		break;
 	case 7:
-		redoOperation();
+		opSucces = redoOperationLogic(repository);
+		if (opSucces == 0) {
+			printf("No more redos!\n");
+		}
+		else { printf("Redo succes! Remaining %d \n", opSucces); }
 		break;
 	case 8:
 		if (indexFound != NULL) free(indexFound);
@@ -187,8 +239,12 @@ void createEntryValues(Repository* repository) {
 
 int main()
 {
-	Repository* repository= createPharmacy(50);
-	printf("Dynamic array generated!\n");
+
+	printf("TODO: Getter setter la toate in repo domain etc! F multe!!\n");
+	printf("TODO: Source code must be specified and include tests for all non-UI functions\n");
+
+	Repository* repository= createPharmacy(5);
+	//printf("Dynamic array generated!\n");
 	createEntryValues(repository);
 
 	while (1) {
