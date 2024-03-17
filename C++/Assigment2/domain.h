@@ -21,3 +21,6 @@ char* getMedicineName(Medicine* medic);
 int getMedicineConcentration(Medicine* medic);
 int getMedicineQuantity(Medicine* medic);
 int getMedicinePrice(Medicine* medic);
+void setMedicinePrice(Medicine* medic, int value);
+void setMedicineQuantity(Medicine* medic, int value);
+void setMedicineConcentration(Medicine* medic, int value);

@@ -131,11 +131,13 @@
     <ClCompile Include="MedicinePharmacy.c" />
     <ClCompile Include="repository.c" />
     <ClCompile Include="services.c" />
+    <ClCompile Include="tests.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="domain.h" />
     <ClInclude Include="repository.h" />
     <ClInclude Include="services.h" />
+    <ClInclude Include="tests.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,16 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 #include <crtdbg.h>
+#include "tests.h"
 #include "services.h"
 
-//TODO de vazut sa iau string-ul generat din domain
-void printMedicine(ArrayPharmacy* pharmacy, int id) {
-	printf("[%d] Name: %s, Concentration: %d, Quantity: %d, Price: %d\n",
-		id,
-		pharmacy->medicList[id].name,
-		pharmacy->medicList[id].concentration,
-		pharmacy->medicList[id].quantity,
-		pharmacy->medicList[id].price);
+
+void printMedicine(Repository* repository, int id) {
+	char* text;
+	text = (char*)malloc(1000 * sizeof(char));
+	getLogicalPrint(repository, id, &text);
+	printf("%s", text);
+	free(text);
 }
 
 
@@ -60,7 +60,7 @@ void manageOperation(int operation, Repository* repository) {
 	int sizeIndexFound = 0;
 	int sortOrdin = 0;
 	int nameSort = 0;
-	int* indexFound = (int*)malloc(getPharmacy(repository)->size * sizeof(int));
+	int* indexFound = (int*)malloc(getLogicSizePharmacy(repository) * sizeof(int));
 	int opSucces = 0;
 	switch (operation)
 	{
@@ -74,10 +74,10 @@ void manageOperation(int operation, Repository* repository) {
 		printf("\n[4/4]Type the price for %s:", name);
 		scanf("%d", &price);
 		addMedicineLogic(repository,name, concentration, quantity, price);
-		printMedicine(getPharmacy(repository), (getPharmacy(repository)->size)-1);
+		printf("Medicine added!\n");
 		break;
 	case 2:
-		if (getPharmacy(repository)->size == 0) {
+		if (getLogicSizePharmacy(repository) == 0) {
 			printf("\n\nPharmacy is empty. First you need to add a medicine.\n\n");
 			break;
 		}
@@ -91,7 +91,7 @@ void manageOperation(int operation, Repository* repository) {
 		}
 		break;
 	case 3:
-		if (getPharmacy(repository)->size == 0) {
+		if (getLogicSizePharmacy(repository) == 0) {
 			printf("\n\nPharmacy is empty. First you need to add a medicine.\n\n");
 			break;
 		}
@@ -135,7 +135,7 @@ void manageOperation(int operation, Repository* repository) {
 			}
 			printf("\n %d results found! \n", sizeIndexFound);
 			for (int i = 0; i < sizeIndexFound; i++) {
-				printMedicine(getPharmacy(repository), (indexFound)[i]);
+				printMedicine(repository, (indexFound)[i]);
 			}
 		}
 		else if (nameSort == 1) {
@@ -153,7 +153,7 @@ void manageOperation(int operation, Repository* repository) {
 			}
 			printf("\n %d results found! \n", sizeIndexFound);
 			for (int i = 0; i < sizeIndexFound; i++) {
-				printMedicine(getPharmacy(repository), (indexFound)[i]);
+				printMedicine(repository, (indexFound)[i]);
 			}
 		}
 		break;
@@ -170,7 +170,7 @@ void manageOperation(int operation, Repository* repository) {
 		}
 		printf("\n %d results found! \n", sizeIndexFound);
 		for (int i = 0; i < sizeIndexFound; i++) {
-			printMedicine(getPharmacy(repository), (indexFound)[i]);
+			printMedicine(repository, (indexFound)[i]);
 		}
 		break;
 	case 6:
@@ -237,13 +237,11 @@ void createEntryValues(Repository* repository) {
 	addMedicineLogic(repository, "Aciclovir", 200, 20, 9);
 }
 
+
 int main()
 {
-
-	printf("TODO: Getter setter la toate in repo domain etc! F multe!!\n");
-	printf("TODO: Source code must be specified and include tests for all non-UI functions\n");
-
-	Repository* repository= createPharmacy(5);
+	runAllTests();
+	Repository* repository = createPharmacyLogic(5);
 	//printf("Dynamic array generated!\n");
 	createEntryValues(repository);
 

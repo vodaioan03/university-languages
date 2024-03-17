@@ -1,16 +1,23 @@
 #include "services.h"
 
+Repository* createPharmacyLogic(int maxSize) {
+	return createPharmacy(maxSize);
+}
+
 void lowerString(char* string) {
+	//Transform a string in lower 
 	for (int i = 0; i < strlen(string); i++) {
 		string[i] = tolower(string[i]);
 	}
 }
 
 int compareString(char* string1, char* string2) {
+	//Compare two given strngs
 	return strcmp(string1, string2);
 }
 
 void addMedicineLogic(Repository* repository, char* nameMedic, int concentrationMedic, int quantityMedic, int priceMedic) {
+	//Add medicine in repository, only logic part
 	int medicExist = 0;
 	for (int i = 0; i < getSizeArray(getPharmacy(repository)); i++) {
 		
@@ -26,6 +33,7 @@ void addMedicineLogic(Repository* repository, char* nameMedic, int concentration
 }
 
 void deleteMedicineLogic(Repository* repository, char* nameMedic, int concentration) {
+	//Delete a medicine from repository
 	int indexName = -1;
 	int i = 0;
 	lowerString(nameMedic);
@@ -44,6 +52,7 @@ void deleteMedicineLogic(Repository* repository, char* nameMedic, int concentrat
 }
 
 void updateMedicineLogic(Repository* repository, char* nameMedic, int concentration, char* newName, int newConcentration, int newQuantity, int newPrice) {
+	//Update info for medicine in logic
 	int indexName = -1;
 	int i = 0;
 	for (i = 0; i < getSizeArray(getPharmacy(repository)); i++) {
@@ -58,6 +67,7 @@ void updateMedicineLogic(Repository* repository, char* nameMedic, int concentrat
 }
 
 void sortArrayByNameAscending(Repository* repository,int* sizeIndex, int* arr) {
+	//Sort a given array ascending
 	for (int i = 0; i < *sizeIndex; i++) {
 		char string1[100];
 		
@@ -76,6 +86,7 @@ void sortArrayByNameAscending(Repository* repository,int* sizeIndex, int* arr) {
 	}
 }
 void sortArrayByNameDescending(Repository* repository, int* sizeIndex, int* arr) {
+	//Sort a given array descending by name
 	for (int i = 0; i < *sizeIndex; i++) {
 		char string1[100];
 
@@ -96,6 +107,7 @@ void sortArrayByNameDescending(Repository* repository, int* sizeIndex, int* arr)
 
 
 void searchAllMedicineString(Repository* repository, char* searchName, int* sizeIndex, int** indexFound, SortFunction functionSort) {
+	//Search all mediicne string who matches with given string
 	int i = 0;
 	int lenName = strlen(searchName);
 	char nameString[100];
@@ -113,6 +125,7 @@ void searchAllMedicineString(Repository* repository, char* searchName, int* size
 }
 
 void searchAllMedicineQuantity(Repository* repository, int quantitySearcb, int* sizeIndex, int** indexFound, SortFunction functionSort) {
+	//Search medicine by quantity
 	int i = 0;
 	for (i = 0; i < getSizeArray(getPharmacy(repository)); i++) {
 		if (getMedicineQuantity(getElemByID(getPharmacy(repository),i)) == quantitySearcb) {
@@ -123,10 +136,8 @@ void searchAllMedicineQuantity(Repository* repository, int quantitySearcb, int* 
 	(*functionSort)(repository, sizeIndex, *indexFound);
 }
 
-
-
-//TODO de facut sa trimit functia ca parametru si sa sortez si aici crescator sau descrescator dupa cantitate
 void showAllMedicineBySupply(Repository* repository, int minimSupply, int* sizeIndex, int** indexFound, SortFunction functionSort) {
+	//Search all medicine who are smaller than supply
 	int i;
 	for (i = 0; i < (getSizeArray(getPharmacy(repository))); i++) {
 		if (getMedicineQuantity(getElemByID(getPharmacy(repository), i)) < minimSupply) {
@@ -138,9 +149,10 @@ void showAllMedicineBySupply(Repository* repository, int minimSupply, int* sizeI
 }
 
 int undoOperationLogic(Repository* repository) {
+	//Undo operation logical
 	if (getPosUndo(repository) > 1) {
 		undoOperation(repository);
-		return getPosUndo(repository) - 1;
+		return getPosUndo(repository);
 	}
 	else {
 		return 0;
@@ -148,6 +160,7 @@ int undoOperationLogic(Repository* repository) {
 }
 
 int redoOperationLogic(Repository* repository) {
+	//Redo operational logic
 	if (getPosRedo(repository) > 1) {
 		redoOperation(repository);
 		return getPosRedo(repository);
@@ -155,4 +168,14 @@ int redoOperationLogic(Repository* repository) {
 	else {
 		return 0;
 	}
+}
+
+int getLogicSizePharmacy(Repository* repo) {
+	//Return size of pharmacy
+	return getSizeArray(getPharmacy(repo));
+}
+
+void getLogicalPrint(Repository* repository,int position, char** textInfo) {
+	//Set print for text
+	getPrintText(repository, position,textInfo);
 }

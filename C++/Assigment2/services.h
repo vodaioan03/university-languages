@@ -20,3 +20,6 @@ void sortArrayByNameAscending(Repository* repository, int* sizeIndex, int* arr);
 void sortArrayByNameDescending(Repository* repository, int* sizeIndex, int* arr);
 int undoOperationLogic(Repository* repository);
 int redoOperationLogic(Repository* repository);
+int getLogicSizePharmacy(Repository* repo);
+void getLogicalPrint(Repository* repository, int position, char** textInfo);
+Repository* createPharmacyLogic(int maxSize);

@@ -53,7 +53,7 @@ void arrayCreated(Repository* repository, ArrayPharmacy* arrayc);
 int getPosUndo(Repository* repository);
 int getPosRedo(Repository* repository);
 ArrayPharmacy* getPharmacy(Repository* repository);
-
+void getPrintText(Repository* repository, int position,char** string);
 
 /*
 */
