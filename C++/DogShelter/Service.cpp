@@ -9,8 +9,12 @@ Service::~Service()
 }
 
 bool Service::verifyDogExist(string nameVerify, string breedVerify){
-	if (this->repo.getDogForUpdate(nameVerify, breedVerify) == NULL) return false;
-	return true;
+	if (this->repo.getDogForUpdate(nameVerify, breedVerify) != NULL) return true;
+	return false;
+}
+bool Service::verifyAddoptedDogExist(string nameVerify, string breedVerify) {
+	if (this->repo.getAddoptedDogForUpdate(nameVerify, breedVerify) != NULL) return true;
+	return false;
 }
 
 bool Service::validAge(string age) {
@@ -35,6 +39,10 @@ void Service::deleteDog(string name, string breed) {
 	this->repo.deleteDog(*this->repo.getDogForUpdate(name,breed));
 }
 
+void Service::deleteDogAddopted(string name, string breed) {
+	this->repo.deleteAddoptedDog(*this->repo.getAddoptedDogForUpdate(name, breed));
+}
+
 void Service::updateDog(string name, string breed, string newName, string newBreed, string newAge, string newPhotograph) {
 	
 	int ageUpdate = stoi(newAge);
@@ -43,8 +51,8 @@ void Service::updateDog(string name, string breed, string newName, string newBre
 }
 
 bool Service::verifyAddopt(string name, string breed) {
-	Dog dogFound = *this->repo.getDogForUpdate(name, breed);
-	return dogFound.getAdopted();
+	if(this->repo.getAddoptedDogForUpdate(name, breed) == NULL) return false;
+	return true;
 }
 
 Dog* Service::getAllElementsNotAddopted() {
@@ -76,12 +84,23 @@ void Service::addoptDog(int index) {
 void Service::searchDogByBreedAge(int* indexes, int &indexIndexes, string breed, string age) {
 	int ageInt = stoi(age);
 	Dog* allDogs = this->getAllElementsNotAddopted();
-	for (int i = 0; i < this->repo.getSizeOfDogs(); i++) {
-		if (allDogs[i].getAge() < ageInt && compareLower(breed,allDogs[i].getBreed())) {
-			indexes[indexIndexes] = i;
-			indexIndexes++;
+	if (breed.compare("") == 0) {
+		for (int i = 0; i < this->repo.getSizeOfDogs(); i++) {
+			if (allDogs[i].getAge() < ageInt) {
+				indexes[indexIndexes] = i;
+				indexIndexes++;
+			}
 		}
 	}
+	else {
+		for (int i = 0; i < this->repo.getSizeOfDogs(); i++) {
+			if (allDogs[i].getAge() < ageInt && compareLower(breed, allDogs[i].getBreed())) {
+				indexes[indexIndexes] = i;
+				indexIndexes++;
+			}
+		}
+	}
+
 }
 
 Dog* Service::searchDogByIndex(int indexSearch) {

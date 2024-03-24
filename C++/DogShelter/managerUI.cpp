@@ -137,6 +137,7 @@ void managerUI::searchDogByBreedAge() {
 			cout << dogs[indexes[i]].dogToString() << endl;
 		}
 	}
+	delete[] indexes;
 }
 
 void managerUI::showAllAdoptedDogs() {
@@ -184,9 +185,10 @@ void managerUI::deleteDogOption() {
 	getline(cin, nameDog);
 	cout << "[2/2] Type the breed for " << nameDog << ":";
 	getline(cin, breedDog);
-	if (!this->managerService.verifyDogExist(nameDog, breedDog)) throw exception("This dog doesn't exist!");
+	if (!this->managerService.verifyDogExist(nameDog, breedDog) && !this->managerService.verifyAddoptedDogExist(nameDog, breedDog)) throw exception("This dog doesn't exist!");
 	if (!this->managerService.verifyAddopt(nameDog, breedDog)) throw exception("This dog isn't addopted");
-	this->managerService.deleteDog(nameDog, breedDog);
+	this->managerService.deleteDogAddopted(nameDog, breedDog);
+	cout << "[SUCCES] Dog deleted!" << endl;
 }
 
 void managerUI::updateDogOption() {
@@ -214,11 +216,17 @@ void managerUI::updateDogOption() {
 void managerUI::showAllDogs() {
 	if (this->managerService.getSizeForDogsNotAddopted() == 0) throw exception("No dogs found! All are addopted.");
 	cout << endl;
+	cout << "Dogs wich are not addopted! " << endl << endl;
 	Dog* dogs = this->managerService.getAllElementsNotAddopted();
 	for (int i = 0; i < this->managerService.getSizeForDogsNotAddopted(); i++) {
 		cout << dogs[i].dogToString() << endl;
 	}
 	cout << endl;
+	cout << "Dogs wich are addopted! " << endl << endl;
+	dogs = this->managerService.getAllElementsAddopted();
+	for (int i = 0; i < this->managerService.getSizeForDogsAddopted(); i++) {
+		cout << dogs[i].dogToString() << endl;
+	}
 }
 
 

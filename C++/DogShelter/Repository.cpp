@@ -17,6 +17,10 @@ void Repository::deleteDog(Dog dogDelete)
 {
 	this->dogs.deleteElement(dogDelete);
 }
+void Repository::deleteAddoptedDog(Dog dogDelete)
+{
+	this->addoptions.deleteElement(dogDelete);
+}
 
 void Repository::updateDog(Dog &dogUpdate, string newName, string newBreed, int newAge, string newPhotograph) {
 	dogUpdate.setAge(newAge);
@@ -26,10 +30,6 @@ void Repository::updateDog(Dog &dogUpdate, string newName, string newBreed, int 
 	cout << dogUpdate.dogToString() << endl;
 }
 
-Dog Repository::searchDogByName(string nameSearch)
-{
-	return *this->dogs.getElemByName(nameSearch);
-}
 Dog* Repository::searchDogByIndex(int index)
 {
 	return this->dogs.getElemById(index);
@@ -38,6 +38,11 @@ Dog* Repository::searchDogByIndex(int index)
 Dog* Repository::getDogForUpdate(string name, string breed)
 {
 	return this->dogs.getElemForUpdate(name,breed);
+}
+
+Dog* Repository::getAddoptedDogForUpdate(string name, string breed)
+{
+	return this->addoptions.getElemForUpdate(name, breed);
 }
 
 Dog* Repository::getAllElements()

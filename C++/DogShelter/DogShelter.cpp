@@ -1,6 +1,7 @@
 #include <iostream>
 #include "managerUI.h"
 #include "crtdbg.h"
+#include "tests.h"
 
 using namespace std;
 
@@ -44,7 +45,8 @@ int main()
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
-    cout << "TODO: Provide tests and specifications for non-trivial functions outside the UI. Test coverage must be at least 98% for all layers, except the UI." << endl << endl;
+
+    callTests();
 
 
     managerUI ui = managerUI();
