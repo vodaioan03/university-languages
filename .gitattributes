@@ -1,5 +1,5 @@
 *.java linguist-detectable=true
-* linguist-vendored
+*.html linguist-vendored
 *.js linguist-vendored=true
 *.python linguist-detectable=true
 *.cpp linguist-detectable=true
