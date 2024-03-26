@@ -2,4 +2,3 @@
 *.java linguist-detectable=true
 *.cpp linguist-detectable=true
 *.c linguist-detectable=true
-*.py linguist-detectable=true
