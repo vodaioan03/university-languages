@@ -27,7 +27,6 @@ void Repository::updateDog(Dog &dogUpdate, string newName, string newBreed, int 
 	dogUpdate.setName(newName);
 	dogUpdate.setBreed(newBreed);
 	dogUpdate.setPhotograph(newPhotograph);
-	cout << dogUpdate.dogToString() << endl;
 }
 
 Dog* Repository::searchDogByIndex(int index)

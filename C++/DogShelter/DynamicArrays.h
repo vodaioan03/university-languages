@@ -37,6 +37,15 @@ public:
 	~DynamicArray() {
 		delete[] this->listOfElems;
 	}
+
+	DynamicArray(const DynamicArray& vector) {
+		this->capacity = vector.capacity;
+		this->size = vector.size;
+		this->listOfElems = new TElem[this->size];
+		for (int i = 0; i < this->size; i++) {
+			this->listOfElems[i] = vector.listOfElems[i];
+		}
+	}
 	/// <summary>
 	/// Get max capacity for list
 	/// </summary>
@@ -153,5 +162,19 @@ public:
 		return NULL;
 	}
 
+	DynamicArray& operator=(const DynamicArray& array) const {
+		if (this == &other) return *this;
+		this->size = array.size;
+		this->capacity = array.capacity;
+		delete[] this->listOfElems;
+		this->listOfElems = new TElem[array.capacity];
+		for (int i = 0; i < this->size; i++) {
+			this->listOfElems[i] = array.listOfElems[i];
+		}
+		return *this;
+	}
 
+	TElem& operator[](int position) {
+		return this->listOfElems[position];
+	}
 };
