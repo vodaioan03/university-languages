@@ -10,6 +10,14 @@
 #include <sstream>
 #include "VirtualRepo.h"
 #include "Exceptions.h"
+
+#include <stdlib.h>
+
+#include "mysql_connection.h"
+#include <cppconn/driver.h>
+#include <cppconn/exception.h>
+#include <cppconn/prepared_statement.h>
+
 using namespace std;
 
 class MongoDB : public VirtualRepo
@@ -17,22 +25,31 @@ class MongoDB : public VirtualRepo
 private:
 	vector<class Dog> dogs;
 	vector<class Dog> addoptions;
-	string file = "";
 	Exceptions except{};
+
+	string server = "localhost:3306";
+	string database = "dogshelter";
+	string username = "Voda";
+	string password = "Parola123";
+
+	sql::Driver* driver;
+	sql::Connection* con;
+	sql::Statement* stmt;
+	sql::PreparedStatement* pstmt;
+	sql::ResultSet* res;
 
 
 public:
 	MongoDB();
-	MongoDB(string filename);
+	~MongoDB();
 
 	void loadData();
-
-	void saveData();
 	/// <summary>
 	/// Add Dog in dogs array
 	/// </summary>
 	/// <param name="dogAdd"></param>
 	void addDog(Dog dogAdd);
+	void addDogSQL(Dog dogadd);
 	/// <summary>
 	/// Delete dog.
 	/// </summary>

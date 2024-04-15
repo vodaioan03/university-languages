@@ -1,78 +1,115 @@
-#include "MongoDB.h"
+﻿#include "MongoDB.h"
 
-MongoDB::MongoDB(string filename)
-{
-	this->file = filename;
-	this->loadData();
-}
 
 void MongoDB::loadData()
 {
-	ifstream fin(this->file);
-	string line;
-	while (getline(fin, line)) {
-		istringstream ss(line);
-		vector<std::string> lineParse;
-		string token;
-		while (getline(ss, token, ',')) {
-			lineParse.push_back(token);
-		}
-		Dog dog = Dog(lineParse[1], lineParse[0], stoi(lineParse[2]), lineParse[3]);
-		if (stoi(lineParse[4]) == 1) {
-			dog.setAdopted(true);
-			this->addoptions.push_back(dog);
-		}
-		else {
-			this->dogs.push_back(dog);
-		}
-
-	}
-	cout << "File loaded!" << endl;
-}
-
-void MongoDB::saveData()
-{
-	ofstream out(this->file);
-	for (Dog var : this->dogs)
+	try
 	{
-		out << var.dogSave() << endl;
-	}
+		res = stmt->executeQuery("SELECT * FROM animals");
 
-	for (Dog var : this->addoptions)
-	{
-		out << var.dogSave() << endl;
+		while (res->next()) {
+			string breed = res->getString("breed");
+			string name = res->getString("name");
+			int age = res->getInt("age");
+			string photograph = res->getString("photograph");
+			bool adopted = res->getBoolean("adopted");
+
+			Dog dog(breed, name, age, photograph);
+			if (adopted == 1) {
+				dog.setAdopted(true);
+				this->addoptions.push_back(dog);
+			}
+			else {
+				this->dogs.push_back(dog);
+			}
+		}
+		cout << "File loaded!" << endl;
 	}
+	catch (const std::exception& e)
+	{
+		cout << e.what() << endl;
+	}
+	
 }
 
 MongoDB::MongoDB()
 {
+	try
+	{
+		driver = get_driver_instance();
+		con = driver->connect(server, username, password);
+		stmt = con->createStatement();
+		stmt->execute("CREATE DATABASE IF NOT EXISTS " + this->database);
+		con->setSchema(this->database);
+		stmt->execute("CREATE TABLE IF NOT EXISTS animals (id INT PRIMARY KEY AUTO_INCREMENT, breed VARCHAR(255), name VARCHAR(255), age INT, photograph VARCHAR(255), adopted BOOLEAN)");
+	}
+	catch (sql::SQLException e)
+	{
+	}
+	this->loadData();
+}
+
+MongoDB::~MongoDB()
+{
+	delete pstmt;
+	delete con;
+	delete res;
 }
 
 void MongoDB::addDog(Dog dogAdd)
 {
 	this->dogs.push_back(dogAdd);
-	this->saveData();
+	this->addDogSQL(dogAdd);
+}
+
+void MongoDB::addDogSQL(Dog dogadd)
+{
+	string insertQuery = "INSERT INTO animals (breed, name, age, photograph, adopted) VALUES (?, ?, ?, ?, ?)";
+	unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(insertQuery));
+
+	pstmt->setString(1, dogadd.getBreed()); 
+	pstmt->setString(2, dogadd.getName()); 
+	pstmt->setInt(3, dogadd.getAge()); 
+	pstmt->setString(4, dogadd.getPhotograph()); 
+	pstmt->setBoolean(5, dogadd.getAdopted()); 
+
+	pstmt->executeUpdate();
 }
 
 void MongoDB::deleteDog(Dog dogDelete)
 {
 	int positionForDelete = this->getPositionForDog(dogDelete);
 	this->dogs.erase(this->dogs.begin() + positionForDelete);
-	this->saveData();
 }
 void MongoDB::deleteAddoptedDog(Dog dogDelete)
 {
 	int positionForDelete = this->getPositionForAddoptedDog(dogDelete);
+	string deleteQuery = "DELETE FROM animals WHERE name = ?";
+	unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(deleteQuery));
+
+	pstmt->setString(1, dogDelete.getName());
+	pstmt->executeUpdate();
+
 	this->addoptions.erase(this->addoptions.begin() + positionForDelete);
-	this->saveData();
+
 }
 
 void MongoDB::updateDog(Dog& dogUpdate, string newName, string newBreed, int newAge, string newPhotograph) {
+	string updateQuery = "UPDATE animals SET breed = ?, name = ?, age = ?, photograph = ? WHERE name = ?";
+	unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(updateQuery));
+
+	pstmt->setString(1, newBreed);
+	pstmt->setString(2, newName);
+	pstmt->setInt(3, newAge);
+	pstmt->setString(4, newPhotograph);
+	pstmt->setString(5, dogUpdate.getName());
+
+	pstmt->executeUpdate();
+
 	dogUpdate.setAge(newAge);
 	dogUpdate.setName(newName);
 	dogUpdate.setBreed(newBreed);
 	dogUpdate.setPhotograph(newPhotograph);
-	this->saveData();
 }
 
 Dog* MongoDB::searchDogByIndex(int index)
@@ -130,19 +167,32 @@ void MongoDB::addoptDog(string name, string breed) {
 	if (it != this->dogs.end()) {
 		Dog found = *it;
 		found.setAdopted(true);
+
+		string updateQuery = "UPDATE animals SET adopted = ? WHERE name = ?";
+		unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(updateQuery));
+
+		pstmt->setBoolean(1, true);
+		pstmt->setString(2, found.getName());
+
+		pstmt->executeUpdate();
 		this->dogs.erase(it);
 		this->addoptions.push_back(found);
 	}
 
-	this->saveData();
 }
 
 void MongoDB::addoptDog(int index) {
 	Dog dog = this->dogs[index];
 	dog.setAdopted(true);
+	string updateQuery = "UPDATE animals SET adopted = ? WHERE name = ?";
+	unique_ptr<sql::PreparedStatement> pstmt(con->prepareStatement(updateQuery));
+
+	pstmt->setBoolean(1, true);
+	pstmt->setString(2, dog.getName());
+
+	pstmt->executeUpdate();
 	this->dogs.erase(this->dogs.begin() + index);
 	this->addoptions.push_back(dog);
-	this->saveData();
 }
 
 int MongoDB::getPositionForDog(Dog elem)

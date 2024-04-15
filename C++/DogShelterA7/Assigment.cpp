@@ -5,6 +5,7 @@
 #include "TextRepository.h"
 #include "CSVRepository.h"
 #include "HTMLRepository.h"
+#include "MongoDB.h"
 
 using namespace std;
 
@@ -64,7 +65,7 @@ int main()
             cout << "2. File\n";
             cout << "3. CSV \n";
             cout << "4. HTML \n";
-            cout << "5. MongoDB \n";
+            cout << "5. MYSQL \n";
             try
             {
                 getline(cin, option);
@@ -125,8 +126,9 @@ int main()
                     repository = new HTMLRepository(filename, filenameparticulary);
                     break;
                 case 5:
-                    cout << "MongoDB " << endl;
+                    cout << "MYSQL " << endl;
                     repositoryCreate = true;
+                    repository = new MongoDB();
                     break;
                 default:
                     cout << "Wrong Option! Try again! \n";
