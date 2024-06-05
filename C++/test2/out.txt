@@ -1,0 +1,11 @@
+2 doors cars:
+ Price:10000.200000 | Car doors: 2 | Electric  Autonomy 20 Price 3000.200000
+ Price:10100.000000 | Car doors: 2 | Turbo -> Price:3100.000000
+ Price:10100.000000 | Car doors: 2 | Turbo -> Price:3100.000000
+
+4 doors cars:
+ Price:11501.000000 | Car doors: 4 | Electric  Autonomy 100 Price 3001.000000
+ Price:11600.000000 | Car doors: 4 | Turbo -> Price:3100.000000
+ Price:11501.400000 | Car doors: 4 | Electric  Autonomy 140 Price 3001.400000
+ Price:11523.000000 | Car doors: 4 | Electric  Autonomy 2300 Price 3023.000000
+ Price:11600.000000 | Car doors: 4 | Turbo -> Price:3100.000000
